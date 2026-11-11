@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Management | Sigma Academy</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#f3f5fa;
+ font-family:sans-serif;color:#17233d
+}
+header{
+ background:#101c35;color:white;
+ padding:22px 6%;
+ display:flex;justify-content:space-between;
+ align-items:center;flex-wrap:wrap;gap:12px
+}
+.logo{font-size:23px;font-weight:bold;color:#e5b94c}
+header a{color:white;text-decoration:none}
+.container{max-width:1150px;margin:35px auto;padding:15px}
+.heading{margin-bottom:25px}
+.heading p{color:#778198}
+.course-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+ gap:22px
+}
+.course{
+ background:white;border-radius:15px;
+ overflow:hidden;box-shadow:0 4px 18px #0000000c
+}
+.course-top{
+ background:linear-gradient(130deg,#132344,#244775);
+ color:white;padding:25px
+}
+.course-top small{color:#f2c75c}
+.course-top h2{margin:10px 0}
+.course-body{padding:22px}
+.price{
+ font-size:28px;font-weight:bold;color:#17355e;
+ margin:18px 0
+}
+.old-price{
+ text-decoration:line-through;
+ color:#8992a3;font-size:15px
+}
+.discount{color:#16834b;font-weight:bold}
+ul{padding-left:20px;line-height:2;color:#59657a}
+.status{
+ display:inline-block;background:#e9f8ef;
+ color:#16834b;padding:6px 12px;
+ border-radius:20px;font-size:12px
+}
+button{
+ width:100%;padding:12px;border:0;
+ border-radius:8px;background:#132344;
+ color:white;font-weight:bold;cursor:pointer
+}
+.notice{
+ background:#fff7e6;padding:15px;
+ border-radius:9px;margin-top:25px;
+ color:#8b6417;font-size:14px;line-height:1.7
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">SIGMA ACADEMY</div>
+ <a href="admin-dashboard.html">← Admin Dashboard</a>
+</header>
+
+<main class="container">
+
+ <div class="heading">
+  <h1>Course Management</h1>
+  <p>SSC 2027 Special Coaching & Model Test</p>
+ </div>
+
+ <div class="course-grid">
+
+  <article class="course">
+   <div class="course-top">
+    <small>PROGRAM 01</small>
+    <h2>Special Coaching & Model Test</h2>
+    <p>SSC 2027 Complete Program</p>
+   </div>
+   <div class="course-body">
+    <span class="status">November Special Offer</span>
+    <div class="price">
+     ৳৭,০০০
+     <div class="old-price">৳৮,৫০০</div>
+    </div>
+    <p class="discount">নভেম্বর মাসে ৳১,৫০০ ছাড়</p>
+    <ul>
+     <li>স্পেশাল ক্লাস</li>
+     <li>টেস্ট পেপার সলভিং</li>
+     <li>আংশিক মডেল টেস্ট</li>
+     <li>ফাইনাল মডেল টেস্ট</li>
+    </ul>
+    <button type="button" disabled>Admin Preview</button>
+   </div>
+  </article>
+
+  <article class="course">
+   <div class="course-top">
+    <small>PROGRAM 02</small>
+    <h2>Partial & Final Model Test</h2>
+    <p>SSC 2027 Program</p>
+   </div>
+   <div class="course-body">
+    <span class="status">Course Available</span>
+    <div class="price">৳৩,৫০০</div>
+    <ul>
+     <li>আংশিক মডেল টেস্ট</li>
+     <li>ফাইনাল মডেল টেস্ট</li>
+     <li>সলভ ক্লাস</li>
+    </ul>
+    <button type="button" disabled>Admin Preview</button>
+   </div>
+  </article>
+
+  <article class="course">
+   <div class="course-top">
+    <small>PROGRAM 03</small>
+    <h2>Final Model Test</h2>
+    <p>SSC 2027 Program</p>
+   </div>
+   <div class="course-body">
+    <span class="status">Course Available</span>
+    <div class="price">৳১,৫০০</div>
+    <ul>
+     <li>ফাইনাল মডেল টেস্ট</li>
+     <li>সলভ ক্লাস</li>
+    </ul>
+    <button type="button" disabled>Admin Preview</button>
+   </div>
+  </article>
+
+ </div>
+
+ <div class="notice">
+  <strong>Admin Note:</strong>
+  কোর্সগুলোর মূল্য ও বিবরণ আপাতত প্রাথমিকভাবে প্রদর্শিত হচ্ছে।
+  Firebase সংযোগ সম্পন্ন হলে এখান থেকেই কোর্স প্রকাশ ও মূল্য পরিবর্তন করা যাবে।
+ </div>
+
+</main>
+</body>
+</html>

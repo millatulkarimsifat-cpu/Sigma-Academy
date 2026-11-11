@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Admission | Sigma Academy</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .admission-container {
+            max-width: 750px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .admission-container h2 {
+            text-align: center;
+            color: #102542;
+            margin-bottom: 10px;
+        }
+
+        .admission-container p {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .admission-form input,
+        .admission-form select,
+        .admission-form textarea {
+            width: 100%;
+            padding: 13px;
+            margin: 8px 0 16px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .admission-form label {
+            font-weight: 600;
+            color: #102542;
+        }
+
+        .admission-form button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 7px;
+            background: #d4a62a;
+            color: #102542;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="index.html" class="logo">
+        SIGMA<span> ACADEMY</span>
+    </a>
+    <a href="student-dashboard.html" class="login-btn">Dashboard</a>
+</header>
+
+<div class="admission-container">
+
+    <h2>Student Admission Form</h2>
+    <p>সিগমা একাডেমিতে ভর্তির জন্য আবেদন করো</p>
+
+    <form class="admission-form" id="admissionForm">
+
+        <label>শিক্ষার্থীর নাম</label>
+        <input type="text" id="studentName" required>
+
+        <label>পিতার নাম</label>
+        <input type="text" id="fatherName" required>
+
+        <label>মাতার নাম</label>
+        <input type="text" id="motherName" required>
+
+        <label>প্রতিষ্ঠানের নাম (Institution Name)</label>
+        <input type="text" id="institutionName"
+               placeholder="তোমার স্কুল বা কলেজের নাম লিখো" required>
+
+        <label>মোবাইল নম্বর</label>
+        <input type="tel" id="phone" required>
+
+        <label>ইমেইল</label>
+        <input type="email" id="email" required>
+
+        <label>শ্রেণি (Class)</label>
+        <input type="text" id="studentClass"
+               placeholder="যেমন: HSC 1st Year / Class 10" required>
+
+        <label>বিভাগ</label>
+        <select id="group" required>
+            <option value="">বিভাগ নির্বাচন করো</option>
+            <option value="Science">Science</option>
+            <option value="Humanities">Humanities</option>
+            <option value="Business Studies">Business Studies</option>
+        </select>
+
+        <label>ঠিকানা</label>
+        <textarea id="address" rows="3" required></textarea>
+
+        <button type="submit">
+            Submit Admission Application
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+</div>
+
+<footer>
+    <h3>SIGMA ACADEMY</h3>
+    <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
+</footer>
+
+<script type="module">
+
+    import { auth, db } from "./firebase.js";
+
+    import {
+        collection,
+        addDoc,
+        serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+    const form = document.getElementById("admissionForm");
+    const message = document.getElementById("message");
+    const emailInput = document.getElementById("email");
+
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            message.textContent = "আবেদনের আগে Student Login করো।";
+            return;
+        }
+
+        emailInput.value = user.email || "";
+        emailInput.readOnly = true;
+    });
+
+    form.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        const user = auth.currentUser;
+
+        if (!user) {
+            message.textContent = "প্রথমে Student Login করো।";
+            window.location.href = "student-login.html";
+            return;
+        }
+
+        message.textContent = "আবেদন জমা হচ্ছে...";
+
+        try {
+
+            await addDoc(collection(db, "admissions"), {
+
+                uid: user.uid,
+
+                studentName: document.getElementById("studentName").value.trim(),
+
+                fatherName: document.getElementById("fatherName").value.trim(),
+
+                motherName: document.getElementById("motherName").value.trim(),
+
+                institutionName: document.getElementById("institutionName").value.trim(),
+
+                phone: document.getElementById("phone").value.trim(),
+
+                email: user.email,
+
+                studentClass: document.getElementById("studentClass").value.trim(),
+
+                group: document.getElementById("group").value,
+
+                address: document.getElementById("address").value.trim(),
+
+                status: "pending",
+
+                createdAt: serverTimestamp()
+
+            });
+
+            message.textContent = "আবেদন সফলভাবে জমা হয়েছে!";
+
+            form.reset();
+
+            emailInput.value = user.email || "";
+            emailInput.readOnly = true;
+
+        } catch (error) {
+
+            console.error("Admission Error:", error);
+
+            message.textContent =
+                "আবেদন জমা হয়নি। Firebase Database Rules পরীক্ষা করতে হবে।";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

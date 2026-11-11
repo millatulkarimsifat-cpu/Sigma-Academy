@@ -1,0 +1,303 @@
+/* =====================================
+   SIGMA ACADEMY
+   PREMIUM MODERN WEBSITE DESIGN
+   Theme: Navy Blue + Gold + White
+===================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --navy: #101d3a;
+    --navy-light: #1d345b;
+    --gold: #d8ae58;
+    --white: #ffffff;
+    --light: #f5f7fb;
+    --text: #26334a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--white);
+    color: var(--text);
+}
+
+/* NAVIGATION BAR */
+
+.navbar {
+    width: 100%;
+    min-height: 80px;
+    padding: 15px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--navy);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.navbar nav {
+    display: flex;
+    gap: 28px;
+}
+
+.navbar nav a {
+    text-decoration: none;
+    color: #e8eaf0;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.navbar nav a:hover {
+    color: var(--gold);
+}
+
+.login-btn {
+    text-decoration: none;
+    color: var(--navy);
+    background: var(--gold);
+    padding: 10px 25px;
+    border-radius: 7px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: white;
+    transform: translateY(-2px);
+}
+
+/* HERO SECTION */
+
+.hero {
+    min-height: 570px;
+    padding: 100px 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background:
+        radial-gradient(circle at 85% 30%, #304a75 0%, transparent 35%),
+        linear-gradient(120deg, #101d3a, #1d345b);
+    color: white;
+}
+
+.tagline {
+    color: var(--gold);
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 5vw, 65px);
+    line-height: 1.4;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero h1 span {
+    color: var(--gold);
+}
+
+.hero-text {
+    max-width: 580px;
+    font-size: 18px;
+    line-height: 1.9;
+    color: #d6deec;
+    margin-bottom: 32px;
+}
+
+/* HERO BUTTONS */
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 13px 28px;
+    border-radius: 7px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.primary-btn {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+.secondary-btn {
+    border: 1px solid var(--gold);
+    color: white;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+    transform: translateY(-4px);
+}
+
+/* GENERAL SECTIONS */
+
+.section {
+    padding: 85px 8%;
+    text-align: center;
+}
+
+.section .tagline {
+    margin-bottom: 10px;
+}
+
+.section h2 {
+    color: var(--navy);
+    font-size: 34px;
+    margin-bottom: 20px;
+}
+
+.section p {
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+/* COURSE CARDS */
+
+.course-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.course-card {
+    background: white;
+    padding: 35px 25px;
+    border-radius: 13px;
+    border: 1px solid #e6eaf1;
+    box-shadow: 0 8px 25px rgba(16,29,58,0.07);
+    transition: 0.3s;
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--gold);
+    box-shadow: 0 12px 30px rgba(16,29,58,0.12);
+}
+
+.course-card h3 {
+    color: var(--navy);
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+/* ALTERNATE SECTION */
+
+#about,
+#teachers {
+    background: var(--light);
+}
+
+/* FOOTER */
+
+footer {
+    background: var(--navy);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+footer h3 {
+    color: var(--gold);
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+footer p {
+    color: #d6deec;
+    margin: 8px 0;
+}
+
+/* MOBILE RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        padding: 15px 5%;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .navbar nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .navbar nav a {
+        font-size: 13px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .hero {
+        min-height: 500px;
+        padding: 75px 7%;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero-text {
+        font-size: 16px;
+    }
+
+    .section {
+        padding: 60px 6%;
+    }
+
+    .section h2 {
+        font-size: 28px;
+    }
+
+    .course-list {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-buttons {
+        gap: 12px;
+    }
+}

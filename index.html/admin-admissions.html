@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Management | Sigma Academy</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .admin-container h1 {
+            color: #102542;
+            margin-bottom: 10px;
+        }
+
+        .admission-tools {
+            display: flex;
+            gap: 12px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .admission-tools input,
+        .admission-tools select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #102542;
+            color: white;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .pending { color: #d18a00; }
+        .approved { color: green; }
+        .rejected { color: red; }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .approve-btn {
+            background: #198754;
+            color: white;
+        }
+
+        .reject-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        #message {
+            margin: 15px 0;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="admin-dashboard.html" class="logo">
+        SIGMA<span> ACADEMY</span>
+    </a>
+
+    <a href="admin-dashboard.html" class="login-btn">
+        Dashboard
+    </a>
+</header>
+
+<main class="admin-container">
+
+    <h1>Admission Management</h1>
+    <p>শিক্ষার্থীদের ভর্তি আবেদন পরিচালনা</p>
+
+    <div class="admission-tools">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="নাম বা মোবাইল নম্বর দিয়ে খুঁজুন"
+        >
+
+        <select id="statusFilter">
+            <option value="all">সব আবেদন</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+        </select>
+    </div>
+
+    <p id="message">Database সংযোগের অপেক্ষায়...</p>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Institution</th>
+                    <th>Phone</th>
+                    <th>Class</th>
+                    <th>Group</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="admissionTable">
+                <tr>
+                    <td colspan="7">আবেদন লোড হচ্ছে...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<script type="module">
+
+import { auth, ADMIN_EMAIL, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+
+import {
+    collection,
+    getDocs,
+    query,
+    orderBy,
+    doc,
+    writeBatch,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+const table = document.getElementById("admissionTable");
+const message = document.getElementById("message");
+
+const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
+
+let admissions = [];
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+        window.location.href = "admin-login.html";
+        return;
+    }
+
+    if (
+        !user.email ||
+        user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
+    ) {
+        await signOut(auth);
+        window.location.href = "admin-login.html";
+        return;
+    }
+
+    await loadAdmissions();
+
+});
+
+async function loadAdmissions() {
+
+    message.textContent = "আবেদন লোড হচ্ছে...";
+
+    try {
+
+        const q = query(
+            collection(db, "admissions"),
+            orderBy("createdAt", "desc")
+        );
+
+        const snapshot = await getDocs(q);
+
+        admissions = snapshot.docs.map(item => ({
+            id: item.id,
+            ...item.data()
+        }));
+
+        showAdmissions();
+
+        message.textContent = "মোট আবেদন: " + admissions.length;
+
+    } catch (error) {
+
+        console.error("Loading Error:", error);
+
+        message.textContent =
+            "আবেদন লোড করা যায়নি: " +
+            error.code + " - " + error.message;
+
+    }
+
+}
+
+function showAdmissions() {
+
+    const search = searchInput.value.toLowerCase();
+    const filter = statusFilter.value;
+
+    const filtered = admissions.filter(item => {
+
+        const matchesSearch =
+            (item.studentName || "").toLowerCase().includes(search) ||
+            (item.phone || "").includes(search) ||
+            (item.institutionName || "").toLowerCase().includes(search);
+
+        const matchesStatus =
+            filter === "all" || item.status === filter;
+
+        return matchesSearch && matchesStatus;
+
+    });
+
+    table.innerHTML = "";
+
+    if (filtered.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="7">কোনো আবেদন পাওয়া যায়নি।</td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    filtered.forEach(item => {
+
+        const row = document.createElement("tr");
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = item.studentName || "";
+
+        const institutionCell = document.createElement("td");
+        institutionCell.textContent = item.institutionName || "";
+
+        const phoneCell = document.createElement("td");
+        phoneCell.textContent = item.phone || "";
+
+        const classCell = document.createElement("td");
+        classCell.textContent = item.studentClass || "";
+
+        const groupCell = document.createElement("td");
+        groupCell.textContent = item.group || "";
+
+        const statusCell = document.createElement("td");
+        statusCell.textContent = item.status || "pending";
+        statusCell.className =
+            "status " + (item.status || "pending");
+
+        const actionCell = document.createElement("td");
+
+        const approveButton = document.createElement("button");
+        approveButton.textContent = "Approve";
+        approveButton.className = "action-btn approve-btn";
+        approveButton.disabled = item.status === "approved";
+
+        approveButton.addEventListener("click", () => {
+            updateStatus(item, "approved");
+        });
+
+        const rejectButton = document.createElement("button");
+        rejectButton.textContent = "Reject";
+        rejectButton.className = "action-btn reject-btn";
+        rejectButton.disabled = item.status === "rejected";
+
+        rejectButton.addEventListener("click", () => {
+            updateStatus(item, "rejected");
+        });
+
+        actionCell.append(approveButton, rejectButton);
+
+        row.append(
+            nameCell,
+            institutionCell,
+            phoneCell,
+            classCell,
+            groupCell,
+            statusCell,
+            actionCell
+        );
+
+        table.appendChild(row);
+
+    });
+
+}
+
+async function updateStatus(item, status) {
+
+    if (!item.uid) {
+        message.textContent =
+            "এই আবেদনে Student UID নেই।";
+        return;
+    }
+
+    const actionText =
+        status === "approved" ? "Approve" : "Reject";
+
+    const confirmed = confirm(
+        "তুমি কি এই শিক্ষার্থীর আবেদন " +
+        actionText + " করতে চাও?"
+    );
+
+    if (!confirmed) return;
+
+    message.textContent = "পরিবর্তন করা হচ্ছে...";
+
+    try {
+
+        const batch = writeBatch(db);
+
+        const admissionRef = doc(db, "admissions", item.id);
+        const studentRef = doc(db, "students", item.uid);
+
+        batch.update(admissionRef, {
+            status: status,
+            updatedAt: serverTimestamp()
+        });
+
+        batch.set(studentRef, {
+
+            uid: item.uid,
+            studentName: item.studentName || "",
+            fatherName: item.fatherName || "",
+            motherName: item.motherName || "",
+            institutionName: item.institutionName || "",
+            phone: item.phone || "",
+            email: item.email || "",
+            studentClass: item.studentClass || "",
+            group: item.group || "",
+            address: item.address || "",
+            approved: status === "approved",
+            admissionId: item.id,
+            updatedAt: serverTimestamp()
+
+        }, { merge: true });
+
+        await batch.commit();
+
+        message.textContent =
+            status === "approved"
+            ? "শিক্ষার্থী সফলভাবে Approved হয়েছে!"
+            : "শিক্ষার্থীর Approval বাতিল করা হয়েছে!";
+
+        await loadAdmissions();
+
+    } catch (error) {
+
+        console.error("Approval Error:", error);
+
+        message.textContent =
+            "ERROR: " + error.code + " - " + error.message;
+
+    }
+
+}
+
+searchInput.addEventListener("input", showAdmissions);
+statusFilter.addEventListener("change", showAdmissions);
+
+</script>
+
+</body>
+</html>

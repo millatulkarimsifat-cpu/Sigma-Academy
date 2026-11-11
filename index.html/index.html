@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sigma Academy | জ্ঞানের দীপ্তি</title>
+    <meta name="description" content="Sigma Academy - শিক্ষা, সাহিত্য, জ্ঞানচর্চা ও মনন।">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 35px;
+        }
+
+        .course-card, .contact-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .course-card h3,
+        .contact-card h3 {
+            color: #14233f;
+            margin-bottom: 14px;
+        }
+
+        .course-card p, .contact-card p {
+            line-height: 1.8;
+        }
+
+        .department {
+            background: #f2f5fa;
+            color: #14233f;
+            padding: 10px;
+            border-radius: 7px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .discount {
+            color: #d28b16;
+            font-weight: bold;
+        }
+
+        .new-price {
+            color: #14233f;
+            font-size: 25px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+
+        .course-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 11px 22px;
+            background: #14233f;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            transition: 0.3s;
+        }
+
+        .course-btn:hover {
+            background: #c99a35;
+            color: white;
+        }
+
+        .course-features {
+            padding-left: 20px;
+            line-height: 2;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .contact-card a {
+            color: #14233f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* OUR MENTORS */
+
+        .mentor-section {
+            background: #f5f7fb;
+        }
+
+        .mentor-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .mentor-heading .tagline {
+            color: #c99a35;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .mentor-heading h2 {
+            color: #14233f;
+            font-size: 32px;
+            margin: 12px 0;
+        }
+
+        .mentor-heading p {
+            color: #666;
+        }
+
+        .mentor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .mentor-card {
+            background: #fff;
+            border-radius: 15px;
+            border: 1px solid #e5e8ef;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding: 30px 18px;
+        }
+
+        .mentor-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        }
+
+        .mentor-icon {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #14233f;
+            color: #e3b34f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .mentor-info h3 {
+            color: #14233f;
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .mentor-subject {
+            color: #b18020;
+            font-weight: bold;
+            margin-bottom: 13px;
+        }
+
+        .mentor-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+            min-height: 50px;
+        }
+
+        .mentor-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #14233f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .mentor-button:hover {
+            background: #c99a35;
+            color: #fff;
+        }
+
+        .mentor-button.disabled {
+            background: #e8ebf1;
+            color: #596273;
+            cursor: default;
+        }
+
+        @media (max-width: 600px) {
+            .mentor-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .mentor-card {
+                padding: 22px 9px;
+            }
+
+            .mentor-icon {
+                width: 65px;
+                height: 65px;
+                font-size: 25px;
+            }
+
+            .mentor-info h3 {
+                font-size: 15px;
+            }
+
+            .mentor-subject {
+                font-size: 12px;
+            }
+
+            .mentor-description {
+                font-size: 12px;
+                min-height: 65px;
+            }
+
+            .mentor-button {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .mentor-heading h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            SIGMA<span> ACADEMY</span>
+        </a>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#courses">Courses</a>
+            <a href="#teachers">Our Mentors</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <a href="login.html" class="login-btn">Login</a>
+    </header>
+
+    <main>
+
+        <!-- HERO -->
+
+        <section class="hero" id="home">
+            <p class="tagline">EDUCATION • KNOWLEDGE • EXCELLENCE</p>
+
+            <h1>
+                জ্ঞান হোক দীপ্ত,<br>
+                ভবিষ্যৎ হোক <span>উদ্ভাসিত।</span>
+            </h1>
+
+            <p class="hero-text">
+                তোমার স্বপ্ন পূরণের যাত্রায় Sigma Academy
+                হতে পারে তোমার নির্ভরযোগ্য শিক্ষাসঙ্গী।
+            </p>
+
+            <div class="hero-buttons">
+                <a href="admission.html" class="primary-btn">ভর্তি হও →</a>
+                <a href="#courses" class="secondary-btn">কোর্স দেখো</a>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+
+        <section class="section" id="about">
+            <p class="tagline">ABOUT SIGMA</p>
+            <h2>আমাদের সম্পর্কে</h2>
+            <p>শিক্ষা • সাহিত্য • জ্ঞানচর্চা • মনন</p>
+            <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
+        </section>
+
+        <!-- COURSES -->
+
+        <section class="section" id="courses">
+            <p class="tagline">OUR PROGRAMS</p>
+            <h2>আমাদের কোর্সসমূহ</h2>
+
+            <p>
+                বিজ্ঞান ও ব্যবসায় শিক্ষা বিভাগের শিক্ষার্থীদের জন্য
+                বিশেষ একাডেমিক প্রোগ্রাম।
+            </p>
+
+            <div class="course-list">
+
+                <div class="course-card">
+                    <p class="tagline">PROGRAM 01</p>
+                    <h3>Special Coaching & Model Test</h3>
+
+                    <div class="department">
+                        বিভাগ: বিজ্ঞান ও ব্যবসায় শিক্ষা
+                    </div>
+
+                    <p>বিশেষ ক্লাস, টেস্ট পেপার সমাধান এবং মডেল টেস্ট।</p>
+
+                    <ul class="course-features">
+                        <li>Special Classes</li>
+                        <li>Test Paper Solving</li>
+                        <li>Partial Model Test</li>
+                        <li>Final Model Test</li>
+                    </ul>
+
+                    <p><span class="old-price">৳৮,৫০০</span></p>
+                    <p class="discount">নভেম্বর মাসে ছাড় ৳১,৫০০</p>
+                    <p class="new-price">৳৭,০০০</p>
+
+                    <a href="admission.html" class="course-btn">ভর্তি হও →</a>
+                </div>
+
+                <div class="course-card">
+                    <p class="tagline">PROGRAM 02</p>
+                    <h3>Partial & Final Model Test</h3>
+
+                    <div class="department">
+                        বিভাগ: বিজ্ঞান ও ব্যবসায় শিক্ষা
+                    </div>
+
+                    <p>পরীক্ষাভিত্তিক প্রস্তুতি ও সমাধান ক্লাস।</p>
+
+                    <ul class="course-features">
+                        <li>Partial Model Test</li>
+                        <li>Final Model Test</li>
+                        <li>Solve Classes</li>
+                    </ul>
+
+                    <p class="new-price">৳৩,৫০০</p>
+
+                    <a href="admission.html" class="course-btn">ভর্তি হও →</a>
+                </div>
+
+                <div class="course-card">
+                    <p class="tagline">PROGRAM 03</p>
+                    <h3>Final Model Test</h3>
+
+                    <div class="department">
+                        বিভাগ: বিজ্ঞান ও ব্যবসায় শিক্ষা
+                    </div>
+
+                    <p>চূড়ান্ত পরীক্ষার প্রস্তুতি ও সমাধান ক্লাস।</p>
+
+                    <ul class="course-features">
+                        <li>Final Model Test</li>
+                        <li>Solve Classes</li>
+                    </ul>
+
+                    <p class="new-price">৳১,৫০০</p>
+
+                    <a href="admission.html" class="course-btn">ভর্তি হও →</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- OUR MENTORS -->
+
+        <section class="section mentor-section" id="teachers">
+
+            <div class="mentor-heading">
+                <p class="tagline">MEET OUR FACULTY</p>
+                <h2>Our Mentors</h2>
+                <p>Meet the dedicated educators of Sigma Academy.</p>
+            </div>
+
+            <div class="mentor-list">
+
+                <!-- NOOR MUHAMMAD SIR -->
+
+                <div class="mentor-card">
+                    <div class="mentor-icon">নূ</div>
+
+                    <div class="mentor-info">
+                        <h3>নূর মুহাম্মদ স্যার</h3>
+                        <p class="mentor-subject">গণিত ও উচ্চতর গণিত</p>
+
+                        <p class="mentor-description">
+                            গণিত ও উচ্চতর গণিত বিষয়ের শিক্ষক।
+                        </p>
+
+                        <a
+                            href="https://www.facebook.com/share/1deGMaMK8c/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mentor-button">
+                            Facebook Profile →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- JIHAD SIR -->
+
+                <div class="mentor-card">
+                    <div class="mentor-icon">জি</div>
+
+                    <div class="mentor-info">
+                        <h3>জিহাদ স্যার</h3>
+                        <p class="mentor-subject">রসায়ন ও পদার্থবিজ্ঞান</p>
+
+                        <p class="mentor-description">
+                            রসায়ন ও পদার্থবিজ্ঞান বিষয়ের শিক্ষক।
+                        </p>
+
+                        <a
+                            href="https://www.facebook.com/share/1DkmRszK6J/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mentor-button">
+                            Facebook Profile →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ERSHAD SIR -->
+
+                <div class="mentor-card">
+                    <div class="mentor-icon">এ</div>
+
+                    <div class="mentor-info">
+                        <h3>এরশাদ স্যার</h3>
+                        <p class="mentor-subject">বাংলা ১ম ও ২য় পত্র</p>
+
+                        <p class="mentor-description">
+                            বাংলা বিষয়ের শিক্ষক।
+                        </p>
+
+                        <a
+                            href="https://www.facebook.com/share/1EwS9Ku1aX/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mentor-button">
+                            Facebook Profile →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- DR TUHIN SIR -->
+
+                <div class="mentor-card">
+                    <div class="mentor-icon">তু</div>
+
+                    <div class="mentor-info">
+                        <h3>ডা. তুহিন স্যার</h3>
+                        <p class="mentor-subject">জীববিজ্ঞান</p>
+
+                        <p class="mentor-description">
+                            জীববিজ্ঞান বিষয়ের শিক্ষক।
+                        </p>
+
+                        <a
+                            href="https://www.facebook.com/share/1QXpX4hY9A/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mentor-button">
+                            Facebook Profile →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- FAHIM SIR -->
+
+                <div class="mentor-card">
+                    <div class="mentor-icon">ফা</div>
+
+                    <div class="mentor-info">
+                        <h3>ফাহিম স্যার</h3>
+                        <p class="mentor-subject">ইংরেজি ১ম ও ২য় পত্র</p>
+
+                        <p class="mentor-description">
+                            ইংরেজি বিষয়ের শিক্ষক।
+                        </p>
+
+                        <span class="mentor-button disabled">
+                            Profile Coming Soon
+                        </span>
+                    </div>
+                </div>
+
+                <!-- FARHAD SIR -->
+
+                <div class="mentor-card">
+                    <div class="mentor-icon">ফর</div>
+
+                    <div class="mentor-info">
+                        <h3>ফরহাদ স্যার</h3>
+                        <p class="mentor-subject">বাংলাদেশ ও বিশ্বপরিচয় (BGS)</p>
+
+                        <p class="mentor-description">
+                            বাংলাদেশ ও বিশ্বপরিচয় বিষয়ের শিক্ষক।
+                        </p>
+
+                        <a
+                            href="https://www.facebook.com/share/18nNLoFCG6/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mentor-button">
+                            Facebook Profile →
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+
+        <section class="section" id="contact">
+            <p class="tagline">GET IN TOUCH</p>
+            <h2>যোগাযোগ</h2>
+
+            <div class="contact-info">
+
+                <div class="contact-card">
+                    <h3>📍 আমাদের ঠিকানা</h3>
+
+                    <p>
+                        মতি টাওয়ার, ৫ম তলা (লিফট-৪)<br>
+                        ২১৯ নং ইউনিট,<br>
+                        চকবাজার, চট্টগ্রাম।
+                    </p>
+                </div>
+
+                <div class="contact-card">
+                    <h3>📞 যোগাযোগের নম্বর</h3>
+
+                    <p>
+                        <a href="tel:01887993582">
+                            ০১৮৮৭-৯৯৩৫৮২
+                        </a>
+                    </p>
+
+                    <p>
+                        <a href="tel:01854666802">
+                            ০১৮৫৪-৬৬৬৮০২
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer>
+        <h3>SIGMA ACADEMY</h3>
+        <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
+        <p>মতি টাওয়ার, চকবাজার, চট্টগ্রাম।</p>
+        <p>© 2026 Sigma Academy. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

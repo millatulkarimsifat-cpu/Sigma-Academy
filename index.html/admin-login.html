@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Sigma Academy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            SIGMA<span> ACADEMY</span>
+        </a>
+        <a href="login.html" class="login-btn">Back</a>
+    </header>
+
+    <div class="admin-login">
+        <h2>Admin Login</h2>
+        <p>Welcome to Sigma Academy Admin Panel</p>
+
+        <form id="adminForm">
+            <input type="email" id="adminEmail"
+                placeholder="Admin Email" required>
+
+            <input type="password" id="adminPassword"
+                placeholder="Password" required>
+
+            <button type="submit" class="primary-btn">
+                Login as Admin
+            </button>
+
+            <p id="message"></p>
+        </form>
+
+        <a href="login.html" class="back-home">
+            ← Back to Login Selection
+        </a>
+    </div>
+
+    <footer>
+        <h3>SIGMA ACADEMY</h3>
+        <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
+    </footer>
+
+    <script type="module">
+        import { auth, ADMIN_EMAIL } from "./firebase.js";
+
+        import {
+            signInWithEmailAndPassword,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+
+        const form = document.getElementById("adminForm");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("adminEmail").value.trim();
+            const password = document.getElementById("adminPassword").value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+
+                if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+                    await signOut(auth);
+                    message.textContent = "এই অ্যাকাউন্ট Admin নয়।";
+                    return;
+                }
+
+                window.location.href = "admin-dashboard.html";
+
+            } catch (error) {
+                console.error(error);
+                message.textContent = "Login ব্যর্থ: " + error.code;
+            }
+        });
+    </script>
+
+</body>
+</html>

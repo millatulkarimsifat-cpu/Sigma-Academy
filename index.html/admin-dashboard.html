@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Sigma Academy</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+.dashboard {
+    max-width: 1100px;
+    margin: 35px auto;
+    padding: 20px;
+}
+.dashboard-header {
+    background: #101d3a;
+    color: white;
+    padding: 25px;
+    border-radius: 14px;
+}
+.dashboard-header h1 {
+    color: #d6ad52;
+}
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 18px;
+    margin: 25px 0;
+}
+.action-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 22px;
+    color: #101d3a;
+}
+.action-card button {
+    background: #d6ad52;
+    color: #101d3a;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+.class-form {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+}
+.class-form input,
+.class-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 9px 0 17px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+.class-form button {
+    background: #101d3a;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+#message {
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <header class="dashboard-header">
+        <h1>SIGMA ACADEMY</h1>
+        <h2>Admin Dashboard</h2>
+        <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
+    </header>
+
+    <h2>Quick Actions</h2>
+
+    <div class="action-grid">
+
+        <div class="action-card">
+            <h3>Admission Approval</h3>
+            <p>শিক্ষার্থীদের ভর্তি আবেদন পরিচালনা করুন।</p>
+            <button onclick="location.href='admin-admissions.html'">
+                Open
+            </button>
+        </div>
+
+        <div class="action-card">
+            <h3>Manage Student</h3>
+            <p>শিক্ষার্থীদের তথ্য পরিচালনা করুন।</p>
+            <button onclick="alert('Student Management coming soon!')">
+                Open
+            </button>
+        </div>
+
+        <div class="action-card">
+            <h3>Manage Teacher</h3>
+            <p>শিক্ষকদের তথ্য পরিচালনা করুন।</p>
+            <button onclick="alert('Teacher Management coming soon!')">
+                Open
+            </button>
+        </div>
+
+        <div class="action-card">
+            <h3>Add Recorded Class</h3>
+            <p>নতুন রেকর্ডেড ক্লাস যোগ করুন।</p>
+            <button onclick="document.getElementById('classForm').scrollIntoView({behavior:'smooth'})">
+                Add Class
+            </button>
+        </div>
+
+    </div>
+
+    <section class="class-form" id="classForm">
+
+        <h2>Add Recorded Class</h2>
+        <p>নতুন ক্লাসের তথ্য পূরণ করুন।</p>
+
+        <form id="recordedClassForm">
+
+            <label>Class Title</label>
+            <input type="text" id="classTitle"
+            placeholder="ক্লাসের নাম লিখুন" required>
+
+            <label>Subject</label>
+            <input type="text" id="subject"
+            placeholder="বিষয়ের নাম লিখুন" required>
+
+            <label>Chapter</label>
+            <input type="text" id="chapter"
+            placeholder="অধ্যায়ের নাম লিখুন" required>
+
+            <label>Class Description</label>
+            <textarea id="description"
+            placeholder="ক্লাসের বিবরণ লিখুন"></textarea>
+
+            <label>Upload MP4 Video</label>
+            <input type="file" id="videoFile"
+            accept="video/mp4" required>
+
+            <p id="message"></p>
+
+            <button type="submit">Publish Class</button>
+
+        </form>
+
+    </section>
+
+    <p style="text-align:center;margin-top:30px;">
+        © Sigma Academy
+    </p>
+
+</div>
+
+<script>
+document.getElementById("recordedClassForm")
+.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    document.getElementById("message").textContent =
+    "ফর্ম প্রস্তুত হয়েছে। ভিডিও সংরক্ষণ ও প্রকাশের ব্যবস্থা এখনো যুক্ত হয়নি।";
+});
+</script>
+
+</body>
+</html>

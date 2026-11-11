@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login | Sigma Academy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>SIGMA ACADEMY</h1>
+        <h2>Student Login</h2>
+
+        <form id="studentLoginForm">
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <p id="message"></p>
+
+        <p>নতুন শিক্ষার্থী?
+            <a href="student-register.html">Create Account</a>
+        </p>
+    </div>
+
+    <script type="module">
+        import { auth } from "./firebase.js";
+        import {
+            signInWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+
+        const form = document.getElementById("studentLoginForm");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            message.textContent = "Login হচ্ছে...";
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+
+                message.textContent = "Login সফল!";
+                window.location.href = "student-dashboard.html";
+
+            } catch (error) {
+                console.error(error);
+                message.textContent = "Email অথবা Password সঠিক নয়।";
+            }
+        });
+    </script>
+
+</body>
+</html>

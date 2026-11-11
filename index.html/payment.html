@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Checkout | Sigma Academy</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f3f5fa;
+    font-family: sans-serif;
+    color: #17233d;
+}
+
+.navbar {
+    background: #101c35;
+    color: white;
+    padding: 20px 6%;
+}
+
+.logo {
+    color: #e5b94c;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 15px;
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.heading p {
+    color: #778198;
+}
+
+.checkout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 22px;
+}
+
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px #00000008;
+}
+
+.panel h2 {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid #e5e8ef;
+    padding: 16px;
+    border-radius: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.payment-option.selected {
+    border-color: #e2136e;
+    background: #fff7fa;
+}
+
+.bkash {
+    color: #e2136e;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.details {
+    margin-top: 25px;
+    color: #68748a;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 18px 0;
+}
+
+.total {
+    border-top: 1px solid #e5e8ef;
+    padding-top: 20px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.pay-btn {
+    width: 100%;
+    border: none;
+    background: #e2136e;
+    color: white;
+    padding: 15px;
+    border-radius: 9px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.pay-btn:hover {
+    background: #bd105d;
+}
+
+.notice {
+    background: #fff7e6;
+    color: #8b6417;
+    padding: 13px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 18px;
+}
+
+.back {
+    color: #244775;
+    text-decoration: none;
+}
+
+@media(max-width:700px) {
+    .checkout {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        margin: 20px auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">SIGMA ACADEMY</div>
+</header>
+
+<div class="container">
+
+    <div class="heading">
+        <h1>Secure Checkout</h1>
+        <p>তোমার কোর্সের পেমেন্ট সম্পন্ন করো</p>
+    </div>
+
+    <div class="checkout">
+
+        <section class="panel">
+            <h2>Payment Method</h2>
+            <p>পেমেন্টের মাধ্যম নির্বাচন করো</p>
+
+            <div class="payment-option selected">
+                <span class="bkash">bKash</span>
+                <span>● Selected</span>
+            </div>
+
+            <div class="details">
+                <p>✓ Secure Payment Gateway</p>
+                <p>✓ Payment Confirmation</p>
+                <p>✓ Digital Payment Receipt</p>
+            </div>
+
+            <div class="notice">
+                এটি Checkout-এর প্রাথমিক সংস্করণ।
+                আসল bKash Payment Gateway এখনো যুক্ত হয়নি।
+                কোনো টাকা পাঠানোর প্রয়োজন নেই।
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+                <span>Course</span>
+                <strong id="courseName">HSC Complete Course</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Course Fee</span>
+                <strong id="coursePrice">৳ ১,৫০০</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Discount</span>
+                <strong>৳ ০</strong>
+            </div>
+
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="totalPrice">৳ ১,৫০০</span>
+            </div>
+
+            <button class="pay-btn" id="payBtn">
+                Continue to Payment
+            </button>
+
+            <p style="text-align:center;font-size:12px;color:#8992a3;">
+                Secure Checkout | Sigma Academy
+            </p>
+        </section>
+
+    </div>
+
+    <p style="text-align:center;margin-top:25px;">
+        <a class="back" href="student-dashboard.html">
+            ← Back to Dashboard
+        </a>
+    </p>
+
+</div>
+
+<script>
+document.getElementById("payBtn").addEventListener("click", function() {
+    alert("bKash Payment Gateway এখনো সংযুক্ত হয়নি। এটি শুধু Checkout Demo।");
+});
+</script>
+
+</body>
+</html>

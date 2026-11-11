@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration | Sigma Academy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>SIGMA ACADEMY</h1>
+        <h2>Student Registration</h2>
+
+        <form id="registerForm">
+            <input type="text" id="name" placeholder="Full Name" required>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password (Minimum 6 characters)" minlength="6" required>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <p id="message"></p>
+
+        <p>আগে Account আছে?
+            <a href="student-login.html">Login</a>
+        </p>
+    </div>
+
+    <script type="module">
+        import { auth } from "./firebase.js";
+
+        import {
+            createUserWithEmailAndPassword,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+
+        const form = document.getElementById("registerForm");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            message.textContent = "Account তৈরি হচ্ছে...";
+
+            try {
+                const result = await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+                await updateProfile(result.user, {
+                    displayName: name
+                });
+
+                message.textContent = "Account সফলভাবে তৈরি হয়েছে!";
+
+                window.location.href = "admission.html";
+
+            } catch (error) {
+                console.error(error);
+
+                if (error.code === "auth/email-already-in-use") {
+                    message.textContent = "এই Email দিয়ে আগে Account তৈরি হয়েছে।";
+                } else {
+                    message.textContent = "Account তৈরি হয়নি। আবার চেষ্টা করো।";
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

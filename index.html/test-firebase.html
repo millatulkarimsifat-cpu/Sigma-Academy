@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test | Sigma Academy</title>
+</head>
+<body>
+    <h1>Sigma Academy</h1>
+    <p id="status">Firebase সংযোগ পরীক্ষা হচ্ছে...</p>
+
+    <script type="module">
+        import { auth, db } from "./firebase.js";
+
+        document.getElementById("status").textContent =
+            "Firebase SDK সফলভাবে লোড হয়েছে!";
+
+        console.log("Firebase test passed", auth, db);
+    </script>
+</body>
+</html>
