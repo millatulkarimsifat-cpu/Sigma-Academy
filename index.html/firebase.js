@@ -4,6 +4,8 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth
 
 import { getFirestore } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
+import { getStorage } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-storage.js";
+
 // Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCEgrgU2woFNieZUnY9yZ7_3JzGcPuZqeg",
@@ -23,5 +25,10 @@ export const auth = getAuth(app);
 // Firestore Database
 export const db = getFirestore(app);
 
-console.log("Sigma Academy Firebase Connected!");
+// Firebase Storage
+export const storage = getStorage(app);
+
+// Admin Email
 export const ADMIN_EMAIL = "millatulkarimsifat@gmail.com";
+
+console.log("Sigma Academy Firebase Connected!");

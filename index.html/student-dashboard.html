@@ -7,250 +7,614 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-body {
-    margin: 0;
-    background: #f3f5fa;
-    font-family: sans-serif;
-    color: #17233d;
+:root{
+    --navy:#101c35;
+    --navy2:#1d3559;
+    --gold:#e5b94c;
+    --bg:#f3f5fa;
+    --white:#fff;
+    --text:#17233d;
+    --muted:#778198;
 }
-.dashboard {
-    display: flex;
-    min-height: 100vh;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:var(--bg);
+    font-family:Arial,sans-serif;
+    color:var(--text);
 }
-.sidebar {
-    width: 240px;
-    background: #101c35;
-    color: white;
-    padding: 25px 15px;
+.dashboard{display:flex;min-height:100vh}
+.sidebar{
+    width:250px;
+    background:var(--navy);
+    color:white;
+    padding:25px 15px;
+    flex-shrink:0;
+    position:fixed;
+    top:0;bottom:0;left:0;
+    overflow-y:auto;
+    z-index:100;
 }
-.logo {
-    font-size: 23px;
-    font-weight: bold;
-    color: #e5b94c;
-    margin-bottom: 35px;
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    color:var(--gold);
+    margin:5px 8px 30px;
+    text-align:center;
 }
-.sidebar a {
-    display: block;
-    color: #dce3f2;
-    text-decoration: none;
-    padding: 13px;
-    border-radius: 8px;
-    margin: 5px 0;
+.sidebar-label{
+    color:#8796b1;
+    font-size:11px;
+    letter-spacing:1.5px;
+    margin:22px 12px 8px;
 }
-.sidebar a:hover {
-    background: #263958;
-    color: #f2c75c;
+.sidebar a{
+    display:block;
+    color:#dce3f2;
+    text-decoration:none;
+    padding:12px 13px;
+    border-radius:8px;
+    margin:5px 0;
+    font-size:14px;
+    transition:.2s;
 }
-.main {
-    flex: 1;
-    padding: 28px;
-    min-width: 0;
+.sidebar a:hover,.sidebar a.active{
+    background:#263958;
+    color:var(--gold);
 }
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 25px;
+.main{
+    flex:1;
+    min-width:0;
+    margin-left:250px;
+    padding:25px;
 }
-.welcome {
-    background: linear-gradient(120deg,#132344,#244775);
-    color: white;
-    padding: 28px;
-    border-radius: 15px;
-    margin-bottom: 25px;
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:24px;
 }
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
-    gap: 17px;
+.topbar h2{margin:0;color:var(--navy)}
+.topbar p{margin:5px 0;color:var(--muted)}
+.top-actions{display:flex;align-items:center;gap:12px}
+.profile-pill{
+    background:white;
+    padding:10px 15px;
+    border-radius:30px;
+    font-size:13px;
+    box-shadow:0 3px 12px #00000009;
 }
-.card {
-    background: white;
-    padding: 22px;
-    border-radius: 13px;
-    box-shadow: 0 3px 12px #0000000b;
-    text-decoration: none;
-    color: #17233d;
-    transition: .2s;
+.logout{
+    background:#b83b3b;
+    color:white;
+    border:0;
+    padding:11px 18px;
+    border-radius:7px;
+    cursor:pointer;
 }
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 18px #00000015;
+.menu-btn{
+    display:none;
+    background:var(--navy);
+    color:white;
+    border:0;
+    padding:10px 14px;
+    border-radius:7px;
+    cursor:pointer;
 }
-.card .emoji {
-    font-size: 30px;
+.welcome{
+    background:linear-gradient(120deg,#132344,#244775);
+    color:white;
+    padding:30px;
+    border-radius:16px;
+    margin-bottom:25px;
 }
-.card h3 {
-    margin-bottom: 5px;
+.welcome h1{color:var(--gold);margin:0 0 10px}
+.welcome p{line-height:1.8;margin:5px 0}
+.welcome small{color:#dce3f2}
+.section-title{
+    color:var(--navy);
+    margin:30px 0 15px;
+    font-size:21px;
 }
-.card p {
-    color: #778198;
-    font-size: 14px;
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:16px;
+    margin-bottom:25px;
 }
-.section-title {
-    margin: 30px 0 15px;
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:13px;
+    box-shadow:0 3px 12px #00000009;
 }
-.logout {
-    background: #b83b3b;
-    color: white;
-    border: 0;
-    padding: 11px 18px;
-    border-radius: 7px;
-    cursor: pointer;
+.stat .emoji{font-size:25px}
+.stat h2{color:var(--navy);margin:9px 0 4px}
+.stat p{color:var(--muted);font-size:13px;margin:0}
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:17px;
 }
-@media(max-width:700px) {
-    .dashboard {display:block;}
-    .sidebar {width:auto;}
-    .sidebar a {display:inline-block;}
-    .main {padding:17px;}
+.card{
+    background:white;
+    padding:21px;
+    border-radius:13px;
+    box-shadow:0 3px 12px #00000009;
+    color:var(--text);
+}
+.card h3{margin:8px 0;color:var(--navy)}
+.card p{color:var(--muted);font-size:14px;line-height:1.7}
+.card .emoji{font-size:29px}
+.course-card{border-top:4px solid var(--gold)}
+.tag{
+    display:inline-block;
+    background:#fff3d6;
+    color:#8a6418;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+.progress{
+    height:8px;
+    background:#e7ebf2;
+    border-radius:20px;
+    overflow:hidden;
+    margin:12px 0;
+}
+.progress span{
+    display:block;
+    height:100%;
+    background:var(--gold);
+}
+.btn{
+    display:inline-block;
+    background:var(--navy);
+    color:white;
+    padding:10px 15px;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:13px;
+    margin-top:8px;
+    border:0;
+    cursor:pointer;
+}
+.btn:hover{background:var(--navy2)}
+.item{
+    padding:15px 0;
+    border-bottom:1px solid #edf0f4;
+    line-height:1.8;
+}
+.item:last-child{border:0}
+.notice-box{
+    background:#fff8e9;
+    border-left:4px solid var(--gold);
+    padding:17px;
+    border-radius:8px;
+    line-height:1.8;
+}
+.profile-info p{
+    padding:10px 0;
+    border-bottom:1px solid #edf0f4;
+}
+footer{
+    text-align:center;
+    padding:30px 10px;
+    color:var(--muted);
+}
+#loadingMessage{color:#647187;font-size:13px}
+@media(max-width:800px){
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+    }
+    .sidebar.open{transform:translateX(0)}
+    .main{margin-left:0;padding:17px}
+    .menu-btn{display:inline-block}
+}
+@media(max-width:480px){
+    .main{padding:12px}
+    .welcome{padding:22px}
+    .welcome h1{font-size:23px}
+    .topbar h2{font-size:19px}
+    .profile-pill{display:none}
 }
 </style>
 </head>
 
 <body>
+
 <div class="dashboard">
 
-<aside class="sidebar">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
     <div class="logo">SIGMA ACADEMY</div>
-    <a href="student-dashboard.html">🏠 Dashboard</a>
+
+    <p class="sidebar-label">MAIN MENU</p>
+
+    <a href="#dashboard" class="active">🏠 Dashboard</a>
     <a href="#courses">📚 My Courses</a>
+
+    <p class="sidebar-label">LEARNING</p>
+
     <a href="classes.html">🎬 Recorded Classes</a>
     <a href="#live">📡 Live Classes</a>
     <a href="#routine">📅 Class Routine</a>
-    <a href="#exams">📝 Online Exams</a>
-    <a href="#results">📊 Results</a>
     <a href="#materials">📁 Study Materials</a>
+
+    <p class="sidebar-label">EXAMINATION</p>
+
+    <a href="#exams">📝 Online Exams</a>
+    <a href="#results">📊 My Results</a>
+
+    <p class="sidebar-label">OTHERS</p>
+
     <a href="#notices">🔔 Notices</a>
+    <a href="#profile">👤 My Profile</a>
+    <a href="index.html">🌐 Main Website</a>
+
 </aside>
 
+
+<!-- MAIN -->
 <main class="main">
 
-<div class="topbar">
-    <div>
-        <h2>Student Dashboard</h2>
-        <p>Welcome to Sigma Academy</p>
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+        <div>
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <h2 style="display:inline-block;margin-left:8px">
+                Student Dashboard
+            </h2>
+            <p>Welcome to Sigma Academy</p>
+        </div>
+
+        <div class="top-actions">
+            <div class="profile-pill">
+                👤 <span id="topStudentName">Student</span>
+            </div>
+
+            <button class="logout" id="logoutBtn">
+                Logout
+            </button>
+        </div>
+
     </div>
-    <button class="logout" id="logoutBtn">Logout</button>
-</div>
 
-<section class="welcome">
-    <h2>স্বাগতম, <span id="studentName">Student</span>!</h2>
-    <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
-    <p id="studentEmail"></p>
-</section>
 
-<h2 class="section-title">Learning Dashboard</h2>
+    <!-- WELCOME -->
+    <section class="welcome" id="dashboard">
 
-<div class="cards" id="courses">
+        <h1>
+            স্বাগতম, <span id="studentName">Student</span>!
+        </h1>
 
-    <a class="card" href="#courses">
-        <div class="emoji">📚</div>
-        <h3>My Courses</h3>
-        <p>তোমার কোর্সগুলো</p>
-    </a>
+        <p>
+            তোমার শেখার যাত্রাকে আরও সহজ ও সুন্দর করতে
+            Sigma Academy আছে তোমার পাশে।
+        </p>
 
-    <a class="card" href="classes.html">
-        <div class="emoji">🎬</div>
-        <h3>Recorded Classes</h3>
-        <p>রেকর্ড করা ক্লাস</p>
-    </a>
+        <p>
+            জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।
+        </p>
 
-    <a class="card" href="#live">
-        <div class="emoji">📡</div>
-        <h3>Live Classes</h3>
-        <p>লাইভ ক্লাসে অংশগ্রহণ</p>
-    </a>
+        <small id="studentEmail">তোমার অ্যাকাউন্ট লোড হচ্ছে...</small>
 
-    <a class="card" href="#routine">
-        <div class="emoji">📅</div>
-        <h3>Class Routine</h3>
-        <p>ক্লাসের সময়সূচি</p>
-    </a>
+    </section>
 
-    <a class="card" href="#exams">
-        <div class="emoji">📝</div>
-        <h3>Online Exams</h3>
-        <p>অনলাইন পরীক্ষা</p>
-    </a>
 
-    <a class="card" href="#results">
-        <div class="emoji">📊</div>
-        <h3>My Results</h3>
-        <p>পরীক্ষার ফলাফল</p>
-    </a>
+    <!-- STATISTICS -->
+    <h2 class="section-title">Learning Overview</h2>
 
-    <a class="card" href="#materials">
-        <div class="emoji">📁</div>
-        <h3>Study Materials</h3>
-        <p>PDF ও ক্লাস নোট</p>
-    </a>
+    <div class="stats">
 
-    <a class="card" href="#notices">
-        <div class="emoji">🔔</div>
-        <h3>Notices</h3>
-        <p>সর্বশেষ বিজ্ঞপ্তি</p>
-    </a>
+        <div class="stat">
+            <div class="emoji">📚</div>
+            <h2 id="courseCount">—</h2>
+            <p>My Courses</p>
+        </div>
 
-</div>
+        <div class="stat">
+            <div class="emoji">🎬</div>
+            <h2>—</h2>
+            <p>Recorded Classes</p>
+        </div>
 
-<section id="live">
-    <h2 class="section-title">📡 Live Classes</h2>
-    <div class="card">লাইভ ক্লাসের তথ্য এখানে থাকবে।</div>
-</section>
+        <div class="stat">
+            <div class="emoji">📝</div>
+            <h2>—</h2>
+            <p>Online Exams</p>
+        </div>
 
-<section id="routine">
-    <h2 class="section-title">📅 Class Routine</h2>
-    <div class="card">ক্লাসের সময়সূচি এখানে থাকবে।</div>
-</section>
+        <div class="stat">
+            <div class="emoji">🔔</div>
+            <h2>—</h2>
+            <p>New Notices</p>
+        </div>
 
-<section id="exams">
-    <h2 class="section-title">📝 Online Exams</h2>
-    <div class="card">অনলাইন পরীক্ষার তালিকা এখানে থাকবে।</div>
-</section>
+    </div>
 
-<section id="results">
-    <h2 class="section-title">📊 My Results</h2>
-    <div class="card">পরীক্ষার ফলাফল এখানে থাকবে।</div>
-</section>
 
-<section id="materials">
-    <h2 class="section-title">📁 Study Materials</h2>
-    <div class="card">PDF ও অন্যান্য শিক্ষাসামগ্রী এখানে থাকবে।</div>
-</section>
+    <!-- MY COURSES -->
+    <section id="courses">
 
-<section id="notices">
-    <h2 class="section-title">🔔 Notices</h2>
-    <div class="card">Academy-এর বিজ্ঞপ্তি এখানে থাকবে।</div>
-</section>
+        <h2 class="section-title">📚 My Courses</h2>
+
+        <div class="cards">
+
+            <div class="card course-card">
+                <span class="tag">PROGRAM 01</span>
+                <h3>Special Coaching & Model Test</h3>
+                <p>বিজ্ঞান ও ব্যবসায় শিক্ষা বিভাগ</p>
+                <p>ভর্তি অনুমোদিত হলে কোর্সের উপকরণ দেখা যাবে।</p>
+                <a href="admission.html" class="btn">Admission Details →</a>
+            </div>
+
+            <div class="card course-card">
+                <span class="tag">PROGRAM 02</span>
+                <h3>Partial & Final Model Test</h3>
+                <p>বিজ্ঞান ও ব্যবসায় শিক্ষা বিভাগ</p>
+                <p>ভর্তি অনুমোদিত হলে কোর্সের উপকরণ দেখা যাবে।</p>
+                <a href="admission.html" class="btn">Admission Details →</a>
+            </div>
+
+            <div class="card course-card">
+                <span class="tag">PROGRAM 03</span>
+                <h3>Final Model Test</h3>
+                <p>বিজ্ঞান ও ব্যবসায় শিক্ষা বিভাগ</p>
+                <p>ভর্তি অনুমোদিত হলে কোর্সের উপকরণ দেখা যাবে।</p>
+                <a href="admission.html" class="btn">Admission Details →</a>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RECORDED CLASSES -->
+    <section id="recorded">
+
+        <h2 class="section-title">🎬 Recorded Classes</h2>
+
+        <div class="card">
+            <h3>Recorded Lecture Library</h3>
+            <p>
+                অনুমোদিত শিক্ষার্থীরা এখানে তাদের কোর্সের
+                রেকর্ড করা ক্লাস দেখতে পারবে।
+            </p>
+            <a href="classes.html" class="btn">Open Recorded Classes →</a>
+        </div>
+
+    </section>
+
+
+    <!-- LIVE CLASSES -->
+    <section id="live">
+
+        <h2 class="section-title">📡 Live Classes</h2>
+
+        <div class="card">
+            <h3>Live Class Room</h3>
+            <p>
+                লাইভ ক্লাসের সময়সূচি ও যোগদানের লিংক
+                Admin প্রকাশ করলে এখানে দেখা যাবে।
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- ROUTINE -->
+    <section id="routine">
+
+        <h2 class="section-title">📅 Class Routine</h2>
+
+        <div class="card">
+            <h3>Weekly Class Routine</h3>
+            <p>
+                সাপ্তাহিক ক্লাসের রুটিন এখানে প্রকাশ করা হবে।
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- MATERIALS -->
+    <section id="materials">
+
+        <h2 class="section-title">📁 Study Materials</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="emoji">📘</div>
+                <h3>Lecture Notes</h3>
+                <p>শিক্ষকের দেওয়া ক্লাস নোট।</p>
+            </div>
+
+            <div class="card">
+                <div class="emoji">📄</div>
+                <h3>PDF Materials</h3>
+                <p>বিষয়ভিত্তিক PDF ও পড়ার উপকরণ।</p>
+            </div>
+
+            <div class="card">
+                <div class="emoji">📚</div>
+                <h3>Study Resources</h3>
+                <p>প্রয়োজনীয় শিক্ষাসামগ্রী।</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EXAMS -->
+    <section id="exams">
+
+        <h2 class="section-title">📝 Online Exams</h2>
+
+        <div class="card">
+            <h3>Examination Portal</h3>
+            <p>
+                Admin পরীক্ষা প্রকাশ করলে এখানে পরীক্ষার
+                নির্দেশনা ও অংশগ্রহণের ব্যবস্থা থাকবে।
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- RESULTS -->
+    <section id="results">
+
+        <h2 class="section-title">📊 My Results</h2>
+
+        <div class="card">
+            <h3>Academic Performance</h3>
+            <p>
+                পরীক্ষার ফলাফল Admin প্রকাশ করলে এখানে দেখা যাবে।
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- NOTICES -->
+    <section id="notices">
+
+        <h2 class="section-title">🔔 Notices & Announcements</h2>
+
+        <div class="notice-box">
+            <strong>Sigma Academy Notice Board</strong>
+            <p>
+                নতুন ক্লাস, পরীক্ষা, ভর্তি ও অন্যান্য বিজ্ঞপ্তি
+                এখানে প্রকাশ করা হবে।
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+    <section id="profile">
+
+        <h2 class="section-title">👤 My Profile</h2>
+
+        <div class="card profile-info">
+
+            <p><strong>Student Name:</strong>
+                <span id="profileName">Loading...</span>
+            </p>
+
+            <p><strong>Email:</strong>
+                <span id="profileEmail">Loading...</span>
+            </p>
+
+            <p><strong>Account ID:</strong>
+                <span id="profileUid">Loading...</span>
+            </p>
+
+            <p><strong>Account Status:</strong>
+                <span id="accountStatus">Logged In</span>
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        <h3>SIGMA ACADEMY</h3>
+        <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
+        <p>© 2026 Sigma Academy. All Rights Reserved.</p>
+    </footer>
 
 </main>
 </div>
 
+
+<!-- FIREBASE AUTH -->
 <script type="module">
+
 import { auth } from "./firebase.js";
+
 import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 
+
+const studentName = document.getElementById("studentName");
+const studentEmail = document.getElementById("studentEmail");
+
+const topStudentName = document.getElementById("topStudentName");
+
+const profileName = document.getElementById("profileName");
+const profileEmail = document.getElementById("profileEmail");
+const profileUid = document.getElementById("profileUid");
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+
 onAuthStateChanged(auth, (user) => {
+
     if (!user) {
         window.location.href = "student-login.html";
         return;
     }
 
-    document.getElementById("studentName").textContent =
-        user.displayName || "Student";
+    const name = user.displayName || "Student";
+    const email = user.email || "Email unavailable";
 
-    document.getElementById("studentEmail").textContent =
-        user.email || "";
+    studentName.textContent = name;
+    studentEmail.textContent = email;
+
+    topStudentName.textContent = name;
+
+    profileName.textContent = name;
+    profileEmail.textContent = email;
+    profileUid.textContent = user.uid;
+
 });
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "student-login.html";
+
+logoutBtn.addEventListener("click", async () => {
+
+    logoutBtn.disabled = true;
+    logoutBtn.textContent = "Logging out...";
+
+    try {
+        await signOut(auth);
+        window.location.href = "student-login.html";
+
+    } catch (error) {
+        alert("Logout করা যায়নি। আবার চেষ্টা করো।");
+        logoutBtn.disabled = false;
+        logoutBtn.textContent = "Logout";
+        console.error(error);
+    }
+
+});
+
+</script>
+
+
+<script>
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("open");
+}
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+    link.addEventListener("click", () => {
+        document.getElementById("sidebar").classList.remove("open");
+    });
 });
 </script>
 

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Registration | Sigma Academy</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f5fa;
+    color:#17233c;
+}
+header{
+    background:#101d38;
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+header h2{color:#e5bd68;margin:0}
+.container{
+    max-width:800px;
+    margin:25px auto;
+    padding:15px;
+}
+.card{
+    background:white;
+    padding:22px;
+    border-radius:12px;
+    margin-bottom:18px;
+    box-shadow:0 3px 15px #0000000d;
+}
+h3{color:#152747}
+button{
+    background:#152747;
+    color:white;
+    border:0;
+    padding:12px 18px;
+    border-radius:7px;
+    cursor:pointer;
+    margin-top:12px;
+}
+input,textarea,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccd3df;
+    border-radius:7px;
+    font-size:15px;
+    margin-top:7px;
+}
+textarea{min-height:90px}
+label{
+    display:block;
+    margin-top:18px;
+    font-weight:bold;
+}
+.option{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+    font-weight:normal;
+}
+.option input{width:auto;margin:0}
+.small{color:#667085;font-size:14px}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>SIGMA ACADEMY</h2>
+    <p>Exam & Olympiad Registration</p>
+</header>
+
+<div class="container">
+
+<div id="formList">
+    <div class="card">পরীক্ষার তালিকা লোড হচ্ছে...</div>
+</div>
+
+<div id="registrationArea" class="hidden"></div>
+
+</div>
+
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+    collection,
+    getDocs,
+    addDoc,
+    query,
+    where,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+const formList = document.getElementById("formList");
+const registrationArea = document.getElementById("registrationArea");
+
+let selectedForm = null;
+let selectedFormId = null;
+
+async function loadForms(){
+
+    try{
+
+        const q = query(
+            collection(db,"examForms"),
+            where("published","==",true)
+        );
+
+        const snapshot = await getDocs(q);
+
+        formList.innerHTML = "<div class='card'><h3>Available Exams & Olympiads</h3></div>";
+
+        if(snapshot.empty){
+            formList.innerHTML +=
+            "<div class='card'>এখনো কোনো পরীক্ষা প্রকাশিত হয়নি।</div>";
+            return;
+        }
+
+        snapshot.forEach(item=>{
+
+            const data = item.data();
+
+            const card = document.createElement("div");
+            card.className = "card";
+
+            const title = document.createElement("h3");
+            title.textContent = data.title;
+
+            const description = document.createElement("p");
+            description.textContent = data.description || "";
+
+            const deadline = document.createElement("p");
+            deadline.className = "small";
+            deadline.textContent = data.deadline
+                ? "Registration Deadline: " + data.deadline
+                : "Registration Deadline: Not specified";
+
+            const button = document.createElement("button");
+            button.textContent = "Register Now";
+
+            button.onclick = ()=>{
+                openForm(item.id,data);
+            };
+
+            card.append(title,description,deadline,button);
+            formList.appendChild(card);
+
+        });
+
+    }catch(error){
+
+        formList.textContent =
+        "সমস্যা হয়েছে: " + error.message;
+
+    }
+}
+
+function openForm(id,data){
+
+    selectedFormId = id;
+    selectedForm = data;
+
+    formList.classList.add("hidden");
+    registrationArea.classList.remove("hidden");
+
+    registrationArea.innerHTML = "";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const title = document.createElement("h3");
+    title.textContent = data.title;
+
+    const description = document.createElement("p");
+    description.textContent = data.description || "";
+
+    card.append(title,description);
+
+    const form = document.createElement("form");
+    form.id = "studentForm";
+
+    data.questions.forEach((question,index)=>{
+
+        const wrapper = document.createElement("div");
+
+        const label = document.createElement("label");
+        label.textContent =
+            question.title + (question.required ? " *" : "");
+
+        let input;
+
+        if(question.type === "paragraph"){
+
+            input = document.createElement("textarea");
+
+        }else if(question.type === "radio"){
+
+            input = document.createElement("div");
+
+            question.options.forEach(option=>{
+
+                const row = document.createElement("label");
+                row.className = "option";
+
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "question_" + index;
+                radio.value = option;
+
+                if(question.required) radio.required = true;
+
+                const text = document.createTextNode(option);
+
+                row.append(radio,text);
+                input.appendChild(row);
+
+            });
+
+        }else if(question.type === "select"){
+
+            input = document.createElement("select");
+
+            const first = document.createElement("option");
+            first.value = "";
+            first.textContent = "অপশন নির্বাচন করুন";
+            input.appendChild(first);
+
+            question.options.forEach(option=>{
+
+                const opt = document.createElement("option");
+                opt.value = option;
+                opt.textContent = option;
+                input.appendChild(opt);
+
+            });
+
+            if(question.required) input.required = true;
+
+        }else{
+
+            input = document.createElement("input");
+            input.type = "text";
+
+            if(question.required) input.required = true;
+
+        }
+
+        if(input.tagName === "TEXTAREA" ||
+           input.tagName === "INPUT"){
+            input.name = "question_" + index;
+        }
+
+        wrapper.append(label,input);
+        form.appendChild(wrapper);
+
+    });
+
+    const submit = document.createElement("button");
+    submit.type = "submit";
+    submit.textContent = "Submit Registration";
+
+    const back = document.createElement("button");
+    back.type = "button";
+    back.textContent = "Back";
+    back.style.background = "#65718a";
+
+    back.onclick = ()=>{
+        registrationArea.classList.add("hidden");
+        formList.classList.remove("hidden");
+    };
+
+    form.append(submit,back);
+    card.appendChild(form);
+    registrationArea.appendChild(card);
+
+    form.addEventListener("submit",submitRegistration);
+
+}
+
+async function submitRegistration(event){
+
+    event.preventDefault();
+
+    const form = event.target;
+    const answers = {};
+
+    for(let i=0;i<selectedForm.questions.length;i++){
+
+        const question = selectedForm.questions[i];
+        const name = "question_" + i;
+
+        let value = "";
+
+        if(question.type === "radio"){
+
+            const selected = form.querySelector(
+                'input[name="' + name + '"]:checked'
+            );
+
+            value = selected ? selected.value : "";
+
+        }else{
+
+            const field = form.elements.namedItem(name);
+            value = field ? field.value.trim() : "";
+
+        }
+
+        if(question.required && !value){
+
+            alert("সব বাধ্যতামূলক প্রশ্নের উত্তর দিন।");
+            return;
+        }
+
+        answers[question.title] = value;
+
+    }
+
+    try{
+
+        const button = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        button.disabled = true;
+        button.textContent = "Submitting...";
+
+        const registration = await addDoc(
+            collection(db,"examRegistrations"),
+            {
+                formId:selectedFormId,
+                answers:answers,
+                submittedAt:serverTimestamp()
+            }
+        );
+
+        registrationArea.innerHTML = `
+            <div class="card">
+                <h3>Registration Successful!</h3>
+                <p>তোমার রেজিস্ট্রেশন সফলভাবে জমা হয়েছে।</p>
+                <p>Registration ID:</p>
+                <b>${registration.id}</b>
+                <p class="small">এই ID সংরক্ষণ করে রাখো।</p>
+            </div>
+        `;
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("রেজিস্ট্রেশন জমা হয়নি: " + error.message);
+
+        const button = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        if(button){
+            button.disabled = false;
+            button.textContent = "Submit Registration";
+        }
+
+    }
+
+}
+
+loadForms();
+
+</script>
+
+</body>
+</html>

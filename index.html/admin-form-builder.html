@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Builder | Sigma Academy</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f5fa;
+    color:#17233c;
+}
+header{
+    background:#101d38;
+    color:white;
+    padding:22px;
+    text-align:center;
+}
+header h2{margin:0;color:#e5bd68}
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:15px;
+}
+.card{
+    background:white;
+    padding:22px;
+    border-radius:13px;
+    margin-bottom:20px;
+    box-shadow:0 3px 15px #0000000d;
+}
+h3{color:#152747}
+label{
+    display:block;
+    margin:14px 0 7px;
+    font-weight:bold;
+}
+input,textarea,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccd3df;
+    border-radius:7px;
+    font-size:15px;
+}
+textarea{min-height:80px}
+button{
+    border:0;
+    padding:11px 17px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+    margin:7px 4px 0 0;
+}
+.primary{background:#152747;color:white}
+.gold{background:#d8ad53;color:#17233c}
+.danger{background:#ffe5e5;color:#a40000}
+.question{
+    border:1px solid #dce1e9;
+    border-radius:10px;
+    padding:15px;
+    margin-top:15px;
+    background:#fafbfe;
+}
+.small{font-size:13px;color:#65718a}
+.status{color:#087a45;font-weight:bold}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>SIGMA ACADEMY</h2>
+    <p>Dynamic Exam & Olympiad Form Builder</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+    <h3>নতুন রেজিস্ট্রেশন ফরম তৈরি</h3>
+
+    <label>পরীক্ষার নাম</label>
+    <input id="formTitle" placeholder="যেমন: Sigma Math Olympiad 2027">
+
+    <label>পরীক্ষার বিবরণ</label>
+    <textarea id="formDescription"
+    placeholder="পরীক্ষা সম্পর্কে বিস্তারিত লিখুন"></textarea>
+
+    <label>রেজিস্ট্রেশনের শেষ তারিখ</label>
+    <input type="date" id="deadline">
+
+    <h3 style="margin-top:25px">প্রশ্ন তৈরি করুন</h3>
+
+    <div id="questions"></div>
+
+    <button class="gold" onclick="addQuestion()">
+        + নতুন প্রশ্ন যোগ করুন
+    </button>
+
+    <br><br>
+
+    <button class="primary" onclick="publishForm()">
+        Publish Form
+    </button>
+
+    <p id="message"></p>
+</div>
+
+<div class="card">
+    <h3>প্রকাশিত ফরমসমূহ</h3>
+    <div id="formList">লোড হচ্ছে...</div>
+</div>
+
+</div>
+
+<script type="module">
+
+import { auth, db, ADMIN_EMAIL } from "./firebase.js";
+
+import {
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+
+const questionsBox = document.getElementById("questions");
+const message = document.getElementById("message");
+
+let questionCount = 0;
+let isAdmin = false;
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+        document.querySelector(".container").innerHTML =
+        "<div class='card'>প্রথমে Admin হিসেবে Login করুন।</div>";
+        return;
+    }
+
+    if (user.email !== ADMIN_EMAIL) {
+        document.querySelector(".container").innerHTML =
+        "<div class='card'>আপনার এই পেজ ব্যবহারের অনুমতি নেই।</div>";
+        return;
+    }
+
+    isAdmin = true;
+    loadForms();
+});
+
+window.addQuestion = function(){
+
+    questionCount++;
+
+    const id = questionCount;
+
+    const div = document.createElement("div");
+    div.className = "question";
+    div.dataset.id = id;
+
+    div.innerHTML = `
+        <label>প্রশ্ন ${id}</label>
+
+        <input class="q-title"
+        placeholder="প্রশ্ন লিখুন">
+
+        <label>প্রশ্নের ধরন</label>
+
+        <select class="q-type" onchange="changeType(${id})">
+            <option value="text">Short Answer</option>
+            <option value="paragraph">Paragraph</option>
+            <option value="radio">Multiple Choice</option>
+            <option value="select">Dropdown</option>
+        </select>
+
+        <div class="options hidden" id="options-${id}">
+            <label>অপশন (প্রতিটি নতুন লাইনে একটি)</label>
+            <textarea class="q-options"
+            placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
+        </div>
+
+        <label>
+            <input type="checkbox" class="q-required"
+            checked style="width:auto">
+            এই প্রশ্নের উত্তর দেওয়া বাধ্যতামূলক
+        </label>
+
+        <button class="danger"
+        onclick="this.parentElement.remove()">
+            প্রশ্ন মুছুন
+        </button>
+    `;
+
+    questionsBox.appendChild(div);
+};
+
+window.changeType = function(id){
+
+    const div = document.querySelector(
+        `.question[data-id="${id}"]`
+    );
+
+    const type = div.querySelector(".q-type").value;
+    const options = div.querySelector(".options");
+
+    options.classList.toggle(
+        "hidden",
+        !["radio","select"].includes(type)
+    );
+};
+
+window.publishForm = async function(){
+
+    if (!isAdmin) return;
+
+    const title = document.getElementById("formTitle").value.trim();
+    const description = document.getElementById("formDescription").value.trim();
+    const deadline = document.getElementById("deadline").value;
+
+    if (!title) {
+        alert("পরীক্ষার নাম লিখুন");
+        return;
+    }
+
+    const questionElements = [
+        ...document.querySelectorAll(".question")
+    ];
+
+    if (questionElements.length === 0) {
+        alert("কমপক্ষে একটি প্রশ্ন যোগ করুন");
+        return;
+    }
+
+    const questions = [];
+
+    for (const el of questionElements) {
+
+        const questionTitle =
+            el.querySelector(".q-title").value.trim();
+
+        const type = el.querySelector(".q-type").value;
+
+        const required =
+            el.querySelector(".q-required").checked;
+
+        if (!questionTitle) {
+            alert("সব প্রশ্নের নাম লিখুন");
+            return;
+        }
+
+        let options = [];
+
+        if (["radio","select"].includes(type)) {
+
+            options = el.querySelector(".q-options")
+                .value.split("\n")
+                .map(x => x.trim())
+                .filter(Boolean);
+
+            if (options.length < 2) {
+                alert("MCQ বা Dropdown-এর জন্য অন্তত ২টি অপশন দিন");
+                return;
+            }
+        }
+
+        questions.push({
+            title: questionTitle,
+            type,
+            required,
+            options
+        });
+    }
+
+    try {
+
+        message.textContent = "Publish হচ্ছে...";
+
+        await addDoc(collection(db,"examForms"),{
+
+            title,
+            description,
+            deadline,
+            questions,
+
+            published: true,
+
+            createdAt: serverTimestamp()
+
+        });
+
+        message.textContent =
+            "ফরম সফলভাবে Publish হয়েছে!";
+
+        message.className = "status";
+
+        document.getElementById("formTitle").value = "";
+        document.getElementById("formDescription").value = "";
+        document.getElementById("deadline").value = "";
+
+        questionsBox.innerHTML = "";
+        questionCount = 0;
+
+        loadForms();
+
+    } catch(error) {
+
+        console.error(error);
+
+        message.textContent =
+            "সমস্যা হয়েছে: " + error.message;
+
+        message.style.color = "red";
+    }
+};
+
+async function loadForms(){
+
+    if (!isAdmin) return;
+
+    const list = document.getElementById("formList");
+
+    try {
+
+        const snapshot = await getDocs(
+            collection(db,"examForms")
+        );
+
+        list.innerHTML = "";
+
+        if (snapshot.empty) {
+            list.innerHTML = "এখনো কোনো ফরম তৈরি করা হয়নি।";
+            return;
+        }
+
+        snapshot.forEach(item => {
+
+            const data = item.data();
+
+            const div = document.createElement("div");
+            div.className = "question";
+
+            const title = document.createElement("b");
+            title.textContent = data.title || "Untitled Form";
+
+            const status = document.createElement("p");
+            status.className = "small";
+            status.textContent = data.published
+                ? "Published"
+                : "Unpublished";
+
+            const remove = document.createElement("button");
+            remove.className = "danger";
+            remove.textContent = "Delete";
+
+            remove.onclick = async () => {
+
+                if (!confirm("এই ফরমটি মুছতে চান?")) return;
+
+                try {
+                    await deleteDoc(doc(db,"examForms",item.id));
+                    loadForms();
+                } catch(error) {
+                    alert("মুছতে সমস্যা হয়েছে: " + error.message);
+                }
+            };
+
+            div.append(title,status,remove);
+            list.appendChild(div);
+
+        });
+
+    } catch(error) {
+
+        list.textContent = "ফরম লোড হয়নি: " + error.message;
+    }
+}
+
+</script>
+
+</body>
+</html>
