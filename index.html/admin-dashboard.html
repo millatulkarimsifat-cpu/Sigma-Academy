@@ -18,9 +18,8 @@
     padding: 25px;
     border-radius: 14px;
 }
-.dashboard-header h1 {
-    color: #d6ad52;
-}
+.dashboard-header h1 { color: #d6ad52; }
+
 .action-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
@@ -41,6 +40,10 @@
     padding: 11px 18px;
     border-radius: 7px;
     cursor: pointer;
+    font-weight: bold;
+}
+.action-card button:hover {
+    background: #bd963e;
 }
 .class-form {
     background: white;
@@ -66,8 +69,11 @@
     border-radius: 7px;
     cursor: pointer;
 }
-#message {
-    margin-top: 15px;
+#message { margin-top: 15px; }
+
+@media(max-width:600px) {
+    .dashboard { padding: 12px; }
+    .dashboard-header { padding: 18px; }
 }
 </style>
 </head>
@@ -76,88 +82,105 @@
 
 <div class="dashboard">
 
-    <header class="dashboard-header">
-        <h1>SIGMA ACADEMY</h1>
-        <h2>Admin Dashboard</h2>
-        <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
-    </header>
+<header class="dashboard-header">
+    <h1>SIGMA ACADEMY</h1>
+    <h2>Admin Dashboard</h2>
+    <p>জ্ঞান হোক দীপ্ত, ভবিষ্যৎ হোক উদ্ভাসিত।</p>
+</header>
 
-    <h2>Quick Actions</h2>
+<h2>Quick Actions</h2>
 
-    <div class="action-grid">
+<div class="action-grid">
 
-        <div class="action-card">
-            <h3>Admission Approval</h3>
-            <p>শিক্ষার্থীদের ভর্তি আবেদন পরিচালনা করুন।</p>
-            <button onclick="location.href='admin-admissions.html'">
-                Open
-            </button>
-        </div>
-
-        <div class="action-card">
-            <h3>Manage Student</h3>
-            <p>শিক্ষার্থীদের তথ্য পরিচালনা করুন।</p>
-            <button onclick="alert('Student Management coming soon!')">
-                Open
-            </button>
-        </div>
-
-        <div class="action-card">
-            <h3>Manage Teacher</h3>
-            <p>শিক্ষকদের তথ্য পরিচালনা করুন।</p>
-            <button onclick="alert('Teacher Management coming soon!')">
-                Open
-            </button>
-        </div>
-
-        <div class="action-card">
-            <h3>Add Recorded Class</h3>
-            <p>নতুন রেকর্ডেড ক্লাস যোগ করুন।</p>
-            <button onclick="document.getElementById('classForm').scrollIntoView({behavior:'smooth'})">
-                Add Class
-            </button>
-        </div>
-
+    <div class="action-card">
+        <h3>Admission Approval</h3>
+        <p>শিক্ষার্থীদের ভর্তি আবেদন পরিচালনা করুন।</p>
+        <button onclick="location.href='admin-admissions.html'">
+            Open
+        </button>
     </div>
 
-    <section class="class-form" id="classForm">
+    <div class="action-card">
+        <h3>Manage Student</h3>
+        <p>শিক্ষার্থীদের তথ্য পরিচালনা করুন।</p>
+        <button onclick="alert('Student Management coming soon!')">
+            Open
+        </button>
+    </div>
 
-        <h2>Add Recorded Class</h2>
-        <p>নতুন ক্লাসের তথ্য পূরণ করুন।</p>
+    <div class="action-card">
+        <h3>Manage Teacher</h3>
+        <p>শিক্ষকদের তথ্য পরিচালনা করুন।</p>
+        <button onclick="alert('Teacher Management coming soon!')">
+            Open
+        </button>
+    </div>
 
-        <form id="recordedClassForm">
+    <div class="action-card">
+        <h3>Add Recorded Class</h3>
+        <p>নতুন রেকর্ডেড ক্লাস যোগ করুন।</p>
+        <button onclick="document.getElementById('classForm').scrollIntoView({behavior:'smooth'})">
+            Add Class
+        </button>
+    </div>
 
-            <label>Class Title</label>
-            <input type="text" id="classTitle"
-            placeholder="ক্লাসের নাম লিখুন" required>
+    <!-- Exam Form Builder -->
+    <div class="action-card">
+        <h3>Exam & Olympiad Management</h3>
+        <p>নতুন পরীক্ষা বা অলিম্পিয়াডের রেজিস্ট্রেশন ফরম তৈরি ও প্রকাশ করুন।</p>
+        <button onclick="location.href='admin-form-builder.html'">
+            Create Registration Form
+        </button>
+    </div>
 
-            <label>Subject</label>
-            <input type="text" id="subject"
-            placeholder="বিষয়ের নাম লিখুন" required>
+    <!-- Registration Forms -->
+    <div class="action-card">
+        <h3>Student Exam Registration</h3>
+        <p>ওয়েবসাইটে প্রকাশিত পরীক্ষার রেজিস্ট্রেশন ফরম দেখুন।</p>
+        <button onclick="location.href='exam-registration.html'">
+            View Registration Page
+        </button>
+    </div>
 
-            <label>Chapter</label>
-            <input type="text" id="chapter"
-            placeholder="অধ্যায়ের নাম লিখুন" required>
+</div>
 
-            <label>Class Description</label>
-            <textarea id="description"
-            placeholder="ক্লাসের বিবরণ লিখুন"></textarea>
+<section class="class-form" id="classForm">
 
-            <label>Upload MP4 Video</label>
-            <input type="file" id="videoFile"
-            accept="video/mp4" required>
+    <h2>Add Recorded Class</h2>
+    <p>নতুন ক্লাসের তথ্য পূরণ করুন।</p>
 
-            <p id="message"></p>
+    <form id="recordedClassForm">
 
-            <button type="submit">Publish Class</button>
+        <label>Class Title</label>
+        <input type="text" id="classTitle"
+        placeholder="ক্লাসের নাম লিখুন" required>
 
-        </form>
+        <label>Subject</label>
+        <input type="text" id="subject"
+        placeholder="বিষয়ের নাম লিখুন" required>
 
-    </section>
+        <label>Chapter</label>
+        <input type="text" id="chapter"
+        placeholder="অধ্যায়ের নাম লিখুন" required>
 
-    <p style="text-align:center;margin-top:30px;">
-        © Sigma Academy
-    </p>
+        <label>Class Description</label>
+        <textarea id="description"
+        placeholder="ক্লাসের বিবরণ লিখুন"></textarea>
+
+        <label>Upload MP4 Video</label>
+        <input type="file" id="videoFile"
+        accept="video/mp4" required>
+
+        <p id="message"></p>
+
+        <button type="submit">Publish Class</button>
+
+    </form>
+</section>
+
+<p style="text-align:center;margin-top:30px;">
+    © Sigma Academy
+</p>
 
 </div>
 
